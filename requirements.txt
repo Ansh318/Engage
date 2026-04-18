@@ -1,3 +1,4 @@
+# Heroku installs from repo root; keep in sync with src/requirements.txt when developing locally.
 fastapi==0.115.6
 uvicorn[standard]==0.32.1
 sqlalchemy==2.0.36

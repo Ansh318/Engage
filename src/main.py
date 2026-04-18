@@ -23,6 +23,12 @@ app.include_router(activity_sessions.router)
 app.include_router(emotion_journey.router)
 
 
+@app.get("/")
+def root() -> dict[str, str]:
+    """Heroku / browser sanity check (avoids bare 404 on app root)."""
+    return {"service": "engage-api", "health": "/health", "docs": "/docs"}
+
+
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
