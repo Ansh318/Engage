@@ -109,9 +109,19 @@ class ActivitySessionPublic(BaseModel):
     activity_title: str
     pre_emotion_tag_ids: list[str]
     post_emotion_tag_ids: list[str]
+    pre_zone: str | None
+    post_zone: str | None
     videos_total: int | None
     videos_completed: int | None
     used_video_skip: bool
     created_at: datetime
 
     model_config = {"from_attributes": True}
+
+
+class EmotionJourneyStats(BaseModel):
+    """Aggregated zone distribution for profile 'My Emotional Journey'."""
+
+    session_count: int
+    check_in_percentages: dict[str, int]
+    check_out_percentages: dict[str, int]

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'dart:math' as math;
+
+import 'activity_detail_page.dart';
+import 'activity_model.dart';
+import 'api/engage_api.dart';
 import 'reflection_bottom_sheet.dart';
+import 'services/session_store.dart';
 import 'explore_page.dart';
 import 'art_activities_page.dart';
 import 'sound_activities_page.dart';
@@ -19,6 +24,8 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   int _selectedIndex = 0;
+  /// `null` until the first `/users/me` attempt finishes; then first name or empty.
+  String? _firstName;
 
   final List<ModalityCard> _modalities = [
     ModalityCard(
@@ -89,6 +96,36 @@ class _LandingPageState extends State<LandingPage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _loadUserFirstName();
+  }
+
+  Future<void> _loadUserFirstName() async {
+    final token = await SessionStore.getToken();
+    if (!mounted) return;
+    if (token == null) {
+      setState(() => _firstName = '');
+      return;
+    }
+    try {
+      final user = await engageApi.getMe(token);
+      if (!mounted) return;
+      setState(() => _firstName = user.firstName.trim());
+    } catch (e) {
+      debugPrint('LandingPage getMe: $e');
+      if (!mounted) return;
+      setState(() => _firstName = '');
+    }
+  }
+
+  String _welcomeHeading() {
+    final name = _firstName;
+    if (name == null || name.isEmpty) return 'Welcome';
+    return 'Welcome, $name';
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF1F3B40), // Dark teal background
@@ -140,10 +177,10 @@ class _LandingPageState extends State<LandingPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
-                      'Welcome, Shrav',
+                    Text(
+                      _welcomeHeading(),
                       textAlign: TextAlign.left,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
@@ -376,6 +413,24 @@ class _LandingPageState extends State<LandingPage> {
                             'A gentle full-body roll down to release stress and calm your nervous system.',
                         duration: '10 mins',
                         location: 'Anywhere',
+                        onArrowTap: () => _openActivityDetail(
+                          activity: const Activity(
+                            title: 'Gentle Roll Down Reset',
+                            description:
+                                'A gentle full-body roll down to release stress and calm your nervous system.',
+                            duration: '10 mins',
+                            location: 'Anywhere',
+                            imagePath: 'assets/rolldown6.png',
+                            imageColors: [
+                              Color(0xFF2D4A5A),
+                              Color(0xFFFFD700),
+                              Color(0xFF1E3A5F),
+                            ],
+                            facilitatorName: 'Naomi',
+                            facilitatorImagePath: 'assets/naomi.jpeg',
+                          ),
+                          modality: 'movement',
+                        ),
                       ),
                     ),
 
@@ -421,6 +476,26 @@ class _LandingPageState extends State<LandingPage> {
                             'Explore the roles you play each day, and how they shape your emotional world.',
                         duration: '10 mins',
                         location: 'Anywhere',
+                        onArrowTap: () => _openActivityDetail(
+                          activity: const Activity(
+                            title: 'The Roles We Play',
+                            description:
+                                'Explore the roles you play each day, and how they shape your emotional world.',
+                            duration: '10 mins',
+                            location: 'Anywhere',
+                            imagePath: 'assets/roles7.png',
+                            imageColors: [
+                              Color(0xFF1A2E3A),
+                              Color(0xFF2D4A5A),
+                              Color(0xFF4A8A9A),
+                            ],
+                            facilitatorName: 'Sohail Al-Mahri',
+                            facilitatorImagePath: 'assets/sohail.jpg',
+                            fullDescription:
+                                'A reflective, drama-based practice to explore the many roles you move through each day and how each one shapes your emotions. This activity helps you notice patterns, reconnect with your authentic self, and make space for choice in how you show up.',
+                          ),
+                          modality: 'drama',
+                        ),
                       ),
                     ),
 
@@ -466,6 +541,26 @@ class _LandingPageState extends State<LandingPage> {
                             'Turn everyday objects into mirrors for your thoughts and emotions.',
                         duration: '12 mins',
                         location: 'Creative Space',
+                        onArrowTap: () => _openActivityDetail(
+                          activity: const Activity(
+                            title: 'Everyday Objects, Inner Reflections',
+                            description:
+                                'Turn everyday objects into mirrors for your thoughts and emotions.',
+                            duration: '12 mins',
+                            location: 'Creative Space',
+                            imagePath: 'assets/everydayobjects6.png',
+                            imageColors: [
+                              Color(0xFFE8D5B7),
+                              Color(0xFFA8C5D1),
+                              Color(0xFF8B4513),
+                            ],
+                            facilitatorName: 'Sohail Al-Mahri',
+                            facilitatorImagePath: 'assets/sohail.jpg',
+                            fullDescription:
+                                'A gentle, drama-inspired exercise to help you reflect on your current emotional state using simple, familiar objects around you. This activity invites you to create a symbolic arrangement and explore the stories it reveals, offering insight, clarity, and connection with yourself.',
+                          ),
+                          modality: 'drama',
+                        ),
                       ),
                     ),
 
@@ -556,6 +651,7 @@ class _LandingPageState extends State<LandingPage> {
     required String description,
     required String duration,
     required String location,
+    VoidCallback? onArrowTap,
   }) {
     return Column(
       children: [
@@ -766,17 +862,20 @@ class _LandingPageState extends State<LandingPage> {
                           ),
                           const Spacer(),
                           // Arrow button
-                          Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF1E7B8C),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.arrow_forward,
-                              color: Colors.white,
-                              size: 20,
+                          GestureDetector(
+                            onTap: onArrowTap,
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF1E7B8C),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.arrow_forward,
+                                color: Colors.white,
+                                size: 20,
+                              ),
                             ),
                           ),
                         ],
@@ -840,6 +939,20 @@ class _LandingPageState extends State<LandingPage> {
           ],
         ),
       ],
+    );
+  }
+
+  void _openActivityDetail({
+    required Activity activity,
+    required String modality,
+  }) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ActivityDetailPage(
+          activity: activity,
+          modality: modality,
+        ),
+      ),
     );
   }
 }

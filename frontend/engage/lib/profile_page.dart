@@ -1,10 +1,80 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'dart:math' as math;
+
+import 'api/engage_api.dart';
+import 'services/session_store.dart';
 import 'settings_page.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  EngageUser? _user;
+
+  Map<String, int> _checkInPct = {
+    'regulated': 0,
+    'energized': 0,
+    'tense': 0,
+    'low': 0,
+  };
+  Map<String, int> _checkOutPct = {
+    'regulated': 0,
+    'energized': 0,
+    'tense': 0,
+    'low': 0,
+  };
+  bool _journeyCheckIn = true;
+  bool _journeyLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUser();
+    _loadEmotionJourney();
+  }
+
+  int _zonePct(String zoneKey) {
+    final src = _journeyCheckIn ? _checkInPct : _checkOutPct;
+    return src[zoneKey] ?? 0;
+  }
+
+  Future<void> _loadEmotionJourney() async {
+    final token = await SessionStore.getToken();
+    if (!mounted) return;
+    if (token == null) {
+      setState(() => _journeyLoading = false);
+      return;
+    }
+    try {
+      final stats = await engageApi.getEmotionJourneyStats(token);
+      if (!mounted) return;
+      setState(() {
+        _checkInPct = stats.checkInPercentages;
+        _checkOutPct = stats.checkOutPercentages;
+        _journeyLoading = false;
+      });
+    } catch (e) {
+      debugPrint('ProfilePage emotion journey: $e');
+      if (mounted) setState(() => _journeyLoading = false);
+    }
+  }
+
+  Future<void> _loadUser() async {
+    final token = await SessionStore.getToken();
+    if (!mounted) return;
+    if (token == null) return;
+    try {
+      final user = await engageApi.getMe(token);
+      if (mounted) setState(() => _user = user);
+    } catch (e) {
+      debugPrint('ProfilePage getMe: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +139,13 @@ class ProfilePage extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         // Name
-        const Text(
-          'Shrav',
-          style: TextStyle(
+        Text(
+          _user == null
+              ? '…'
+              : (_user!.firstName.trim().isNotEmpty
+                  ? _user!.firstName.trim()
+                  : 'Member'),
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 28,
             fontWeight: FontWeight.bold,
@@ -79,9 +153,9 @@ class ProfilePage extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         // Email
-        const Text(
-          'shravaniR@gmail.com',
-          style: TextStyle(
+        Text(
+          _user?.email ?? '…',
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 16,
             fontWeight: FontWeight.normal,
@@ -256,51 +330,78 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: const Color(0xFFFFD700).withOpacity(0.3),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF066B85).withOpacity(0.32),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '1',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 64,
+                              height: 1,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          child: const Center(
-                            child: Text(
-                              '1',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold,
+                          SizedBox(height: 4),
+                          Text(
+                            'Day Streak',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 40 / 2,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        width: 118,
+                        height: 118,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.cyanAccent.withOpacity(0.15),
+                            width: 1.2,
+                          ),
+                        ),
+                        child: Center(
+                          child: Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.cyanAccent.withOpacity(0.1),
+                                width: 1,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Image.asset(
+                                'assets/Fire Streaks 1.png',
+                                fit: BoxFit.contain,
+                                errorBuilder: (_, __, ___) => const Center(
+                                  child: Text(
+                                    '🔥',
+                                    style: TextStyle(fontSize: 40),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 12),
-                        const Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Day Streak',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const Icon(
-                      Icons.chevron_right,
-                      color: Colors.white,
-                      size: 24,
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -365,23 +466,32 @@ class ProfilePage extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 20),
-                // Check In / Check Out buttons
                 Row(
                   children: [
                     Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF1F3B40).withOpacity(0.8),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'Check In',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
+                      child: GestureDetector(
+                        onTap: () => setState(() => _journeyCheckIn = true),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          decoration: BoxDecoration(
+                            color: _journeyCheckIn
+                                ? const Color(0xFF1F3B40).withOpacity(0.8)
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.3),
+                              width: 1,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Check In',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight:
+                                    _journeyCheckIn ? FontWeight.w600 : FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),
@@ -389,23 +499,29 @@ class ProfilePage extends StatelessWidget {
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.white.withOpacity(0.3),
-                            width: 1,
+                      child: GestureDetector(
+                        onTap: () => setState(() => _journeyCheckIn = false),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          decoration: BoxDecoration(
+                            color: !_journeyCheckIn
+                                ? const Color(0xFF1F3B40).withOpacity(0.8)
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.3),
+                              width: 1,
+                            ),
                           ),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'Check Out',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
+                          child: Center(
+                            child: Text(
+                              'Check Out',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight:
+                                    !_journeyCheckIn ? FontWeight.w600 : FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),
@@ -414,77 +530,58 @@ class ProfilePage extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 24),
-                // Emotional state indicators
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildEmotionIndicator('Regulated', 60),
-                    _buildEmotionIndicator('Energized', 20),
-                    _buildEmotionIndicator('Tense', 10),
-                    _buildEmotionIndicator('Low', 10),
-                  ],
-                ),
+                if (_journeyLoading)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 28),
+                    child: Center(
+                      child: SizedBox(
+                        width: 28,
+                        height: 28,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      ),
+                    ),
+                  )
+                else
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: _EmotionMeter(
+                          label: 'Regulated',
+                          percentage: _zonePct('regulated'),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: _EmotionMeter(
+                          label: 'Energized',
+                          percentage: _zonePct('energized'),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: _EmotionMeter(
+                          label: 'Tense',
+                          percentage: _zonePct('tense'),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: _EmotionMeter(
+                          label: 'Low',
+                          percentage: _zonePct('low'),
+                        ),
+                      ),
+                    ],
+                  ),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildEmotionIndicator(String label, int percentage) {
-    return Column(
-      children: [
-        SizedBox(
-          width: 60,
-          height: 60,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: CircularProgressIndicator(
-                  value: percentage / 100,
-                  strokeWidth: 6,
-                  backgroundColor: Colors.white.withOpacity(0.2),
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    const Color(0xFF4A8A9A),
-                  ),
-                ),
-              ),
-              Container(
-                width: 8,
-                height: 8,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0xFF4A8A9A),
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                child: Text(
-                  '$percentage%',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 12,
-            fontWeight: FontWeight.normal,
-          ),
-        ),
-      ],
     );
   }
 
@@ -620,6 +717,122 @@ class ProfilePage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _EmotionMeter extends StatelessWidget {
+  final String label;
+  final int percentage;
+
+  const _EmotionMeter({
+    required this.label,
+    required this.percentage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final w = constraints.maxWidth;
+        if (w <= 0) {
+          return const SizedBox.shrink();
+        }
+        // Fit ring + label inside each Expanded slot (avoids horizontal overflow).
+        final ring = w.clamp(48.0, 92.0);
+        final inner = ring * (56 / 92);
+        final stroke = (15 * ring / 92).clamp(5.0, 15.0);
+        final pctSize = (16 * ring / 92).clamp(10.0, 16.0);
+        final labelSize = (12 * ring / 92).clamp(8.0, 12.0);
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: SizedBox(
+                width: ring,
+                height: ring,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox(
+                      width: ring,
+                      height: ring,
+                      child: CircularProgressIndicator(
+                        value: percentage / 100,
+                        strokeWidth: stroke,
+                        backgroundColor: const Color(0xFF0B7F99).withOpacity(0.55),
+                        valueColor:
+                            const AlwaysStoppedAnimation<Color>(Color(0xFF00D3F6)),
+                      ),
+                    ),
+                    Container(
+                      width: inner,
+                      height: inner,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: const Color(0xFF006A84),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.1),
+                          width: 1,
+                        ),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        '$percentage%',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: pctSize,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: math.max(6.0, 12 * ring / 92)),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2),
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(
+                  vertical: math.max(5.0, 8 * ring / 92),
+                  horizontal: 4,
+                ),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.white.withOpacity(0.17),
+                      Colors.white.withOpacity(0.05),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(999),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.55),
+                    width: 0.8,
+                  ),
+                ),
+                child: Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: labelSize,
+                    fontWeight: FontWeight.w600,
+                    height: 1.15,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

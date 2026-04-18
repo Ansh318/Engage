@@ -62,8 +62,6 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/landing_page_video.mp4
-    - assets/engage_onboarding_video.mp4
     - assets/art1.png
     - assets/drama3.png
     - assets/movement1.png
@@ -81,6 +79,7 @@ flutter:
     - assets/roles7.png
     - assets/rolldown6.png
     - assets/bodyscan6.png
+    - assets/Fire Streaks 1.png
     - assets/artblog6.png
     - assets/movementblog2.png
     - assets/onboarding_main.jpg
@@ -90,6 +89,10 @@ flutter:
     - assets/page4a.png
     - assets/page5b.png
     - assets/sohail.jpg
+    - assets/shravani.jpeg
+    - assets/chloe.jpeg
+    - assets/naomi.jpeg
+    - assets/Lucy Image .jpg
     - assets/flow_icon_intro.png
     - assets/flow_icon_activity.png
     - assets/flow_icon_reflection.png

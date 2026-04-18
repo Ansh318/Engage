@@ -1,8 +1,8 @@
 import secrets
 from datetime import datetime, timedelta
 
+import bcrypt
 from fastapi import APIRouter, Depends, HTTPException, status
-from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 from config import settings
@@ -11,15 +11,21 @@ from models import SessionRecord, User
 from schemas import AuthResponse, UserLogin, UserPublic, UserRegister
 
 router = APIRouter(prefix="/auth", tags=["auth"])
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+# Bcrypt ignores input past 72 bytes; newer `bcrypt` raises if not truncated.
+def _password_bytes(password: str) -> bytes:
+    return password.encode("utf-8")[:72]
 
 
 def _hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+    return bcrypt.hashpw(_password_bytes(password), bcrypt.gensalt()).decode("ascii")
 
 
 def _verify_password(plain: str, hashed: str) -> bool:
-    return pwd_context.verify(plain, hashed)
+    try:
+        return bcrypt.checkpw(_password_bytes(plain), hashed.encode("ascii"))
+    except ValueError:
+        return False
 
 
 def _new_session(db: Session, user_id: int) -> str:

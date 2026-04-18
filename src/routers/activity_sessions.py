@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from activity_constants import MODALITIES
 from database import get_db
 from deps import get_current_user
+from emotion_zones import compute_regulation_zone
 from models import User, UserActivitySession
 from schemas import ActivitySessionCreate, ActivitySessionPublic
 
@@ -16,12 +17,16 @@ def create_activity_session(
     db: Session = Depends(get_db),
     current: User = Depends(get_current_user),
 ) -> UserActivitySession:
+    pre_zone = compute_regulation_zone(payload.pre_emotion_tag_ids)
+    post_zone = compute_regulation_zone(payload.post_emotion_tag_ids)
     row = UserActivitySession(
         user_id=current.id,
         modality=payload.modality,
         activity_title=payload.activity_title,
         pre_emotion_tag_ids=payload.pre_emotion_tag_ids,
         post_emotion_tag_ids=payload.post_emotion_tag_ids,
+        pre_zone=pre_zone,
+        post_zone=post_zone,
         videos_total=payload.videos_total,
         videos_completed=payload.videos_completed,
         used_video_skip=payload.used_video_skip,

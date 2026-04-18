@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from database import Base, engine
-from routers import activity_sessions, auth, users
+from database import Base, engine, ensure_activity_session_zone_columns
+from routers import activity_sessions, auth, emotion_journey, users
 
 Base.metadata.create_all(bind=engine)
+ensure_activity_session_zone_columns()
 
 app = FastAPI(title="Engage API", version="0.1.0")
 
@@ -19,6 +20,7 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(activity_sessions.router)
+app.include_router(emotion_journey.router)
 
 
 @app.get("/health")

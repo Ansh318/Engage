@@ -7,22 +7,46 @@ import 'activity_detail_page.dart';
 class MovementActivitiesPage extends StatelessWidget {
   const MovementActivitiesPage({super.key});
 
+  static const List<String> _gentleRollDownResetVideos = [
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%207%20-%20Roll%20Down%20-%2001.mp4?alt=media&token=ecb03530-b7d1-4d96-8e8e-bdf056c5aa0e',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%207%20-%20Roll%20Down%20-%2002.mp4?alt=media&token=bf5b022e-3d49-4002-9687-54d88a75ddb0',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%207%20-%20Roll%20Down%20-%2003.mp4?alt=media&token=40df991d-595e-4463-babb-3abce5cd2712',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%207%20-%20Roll%20Down%20-%2004.mp4?alt=media&token=1a4025b1-701b-474d-aa9d-1dfd358a6158',
+  ];
+
+  static const List<String> _bodyScanVideos = [
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%206%20-%20Body%20Scan%2001.mp4?alt=media&token=4ac6eef8-61c2-4784-a091-ba389343d796',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%206%20-%20Body%20Scan%2002.mp4?alt=media&token=36b781db-aa54-4d5c-b71b-c86f0ba33955',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%206%20-%20Body%20Scan%2003.mp4?alt=media&token=add5fb3f-0d5d-4567-ba20-15719fc7a0a8',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%206%20-%20Body%20Scan%2004.mp4?alt=media&token=0ccfc5a5-1481-4254-a750-57348a23823d',
+  ];
+
   final List<Activity> _activities = const [
     Activity(
       title: 'Gentle Roll Down Reset',
-      description: 'A gentle full-body roll down to release stress and calm your nervous system.',
+      description: 'This short movement-based activity guides you through a gentle spinal roll down to support nervous system regulation.',
       duration: '10 mins',
       location: 'Anywhere',
       imagePath: 'assets/rolldown6.png',
       imageColors: [Color(0xFF2D4A5A), Color(0xFFFFD700), Color(0xFF1E3A5F)],
+      facilitatorName: 'Naomi Rogers',
+      facilitatorImagePath: 'assets/naomi.jpeg',
+      fullDescription:
+          'This short movement-based activity guides you through a gentle spinal roll down to support nervous system regulation and help you return to ventral vagal state - where calm, connection, and groundedness live. Ideal when you need a moment to reset, release tension, or re-centre your breath and body.',
+      sessionVideoAssets: _gentleRollDownResetVideos,
     ),
     Activity(
       title: 'Body Scan',
-      description: 'A guided scan to reconnect with your body, one gentle movement and sensation at a time.',
+      description: 'This guided body scan invites you to slowly bring your attention to different parts of your body, from your toes to the top of your head.',
       duration: '7 mins',
       location: 'Anywhere',
       imagePath: 'assets/bodyscan6.png',
       imageColors: [Color(0xFF2D4A5A), Color(0xFFFFD700), Color(0xFF1E3A5F)],
+      facilitatorName: 'Naomi Rogers',
+      facilitatorImagePath: 'assets/naomi.jpeg',
+      fullDescription:
+          'This guided body scan invites you to slowly bring your attention to different parts of your body, from your toes to the top of your head. As you notice sensation, temperature, and tension with curiosity, you create space to regulate your nervous system, settle your mind, and reconnect with yourself in the present moment.',
+      sessionVideoAssets: _bodyScanVideos,
     ),
   ];
 

@@ -71,7 +71,7 @@ class _ActivitySessionPageState extends State<ActivitySessionPage> {
     });
 
     try {
-      final c = VideoPlayerController.asset(_videos[index]);
+      final c = _createControllerForSource(_videos[index]);
       await c.initialize();
       if (!mounted) {
         c.dispose();
@@ -91,6 +91,14 @@ class _ActivitySessionPageState extends State<ActivitySessionPage> {
         });
       }
     }
+  }
+
+  VideoPlayerController _createControllerForSource(String source) {
+    final normalized = source.trim().toLowerCase();
+    if (normalized.startsWith('http://') || normalized.startsWith('https://')) {
+      return VideoPlayerController.networkUrl(Uri.parse(source));
+    }
+    return VideoPlayerController.asset(source);
   }
 
   void _onVideoTick() {

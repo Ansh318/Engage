@@ -51,6 +51,8 @@ class UserActivitySession(Base):
     activity_title: Mapped[str] = mapped_column(String(512))
     pre_emotion_tag_ids: Mapped[list] = mapped_column(JSON)
     post_emotion_tag_ids: Mapped[list] = mapped_column(JSON)
+    pre_zone: Mapped[str | None] = mapped_column(String(32), nullable=True, index=True)
+    post_zone: Mapped[str | None] = mapped_column(String(32), nullable=True, index=True)
     videos_total: Mapped[int | None] = mapped_column(Integer, nullable=True)
     videos_completed: Mapped[int | None] = mapped_column(Integer, nullable=True)
     used_video_skip: Mapped[bool] = mapped_column(Boolean, default=False)

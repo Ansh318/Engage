@@ -9,30 +9,29 @@ class DramaActivitiesPage extends StatelessWidget {
 
   /// Act 1 — plays in order in [ActivitySessionPage].
   static const List<String> _everydayObjectsAct1Videos = [
-    'assets/videos/everyday_objects_act1/01.mp4',
-    'assets/videos/everyday_objects_act1/02.mp4',
-    'assets/videos/everyday_objects_act1/03.mp4',
-    'assets/videos/everyday_objects_act1/04.mp4',
-    'assets/videos/everyday_objects_act1/05.mp4',
-    'assets/videos/everyday_objects_act1/06.mp4',
-    'assets/videos/everyday_objects_act1/07.mp4',
-    'assets/videos/everyday_objects_act1/08.mp4',
-    'assets/videos/everyday_objects_act1/09.mp4',
-    'assets/videos/everyday_objects_act1/10.mp4',
-    'assets/videos/everyday_objects_act1/11.mp4',
-    'assets/videos/everyday_objects_act1/12.mp4',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%204%20-%20Act1%20-%20Eevryday%20objects%20inner%20reflections%2001.mp4?alt=media&token=1f59ddb6-2744-40a0-83fb-21649895aec9',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%204%20-%20Act1%20-%20Eevryday%20objects%20inner%20reflections%2002.mp4?alt=media&token=81daf316-3e0d-4050-a2f0-546c111f6dff',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%204%20-%20Act1%20-%20Eevryday%20objects%20inner%20reflections%2003.mp4?alt=media&token=0a8ea828-60fe-4a3b-9ddc-26df3765b2f6',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%204%20-%20Act1%20-%20Eevryday%20objects%20inner%20reflections%2004.mp4?alt=media&token=83926e1c-29af-42ca-a828-440048718bea',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%204%20-%20Act1%20-%20Eevryday%20objects%20inner%20reflections%2005.mp4?alt=media&token=d0af0de7-7dd6-4d2a-861a-d680b78b82d6',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%204%20-%20Act1%20-%20Eevryday%20objects%20inner%20reflections%2006.mp4?alt=media&token=c81157a1-9d12-4de1-a670-c9a17938b48c',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%204%20-%20Act1%20-%20Eevryday%20objects%20inner%20reflections%2007.mp4?alt=media&token=3fe6e228-13e5-4e7e-9b16-599ece6d4e4b',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%204%20-%20Act1%20-%20Eevryday%20objects%20inner%20reflections%2008.mp4?alt=media&token=97e02426-6ceb-4ec2-bfd1-abdb6f339ec9',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%204%20-%20Act1%20-%20Eevryday%20objects%20inner%20reflections%2009.mp4?alt=media&token=91170929-db81-40c3-b32b-55298f002ba2',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%204%20-%20Act1%20-%20Eevryday%20objects%20inner%20reflections%20010.mp4?alt=media&token=c8ee2127-5b65-48fa-8c15-6a1d3510fcc0',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%204%20-%20Act1%20-%20Eevryday%20objects%20inner%20reflections%20011.mp4?alt=media&token=7d85437e-40f0-480d-b156-00e91d64abe9',
   ];
 
   /// Act 2 — The Roles We Play (8 parts).
   static const List<String> _rolesWePlayAct2Videos = [
-    'assets/videos/roles_we_play_act2/01.mp4',
-    'assets/videos/roles_we_play_act2/02.mp4',
-    'assets/videos/roles_we_play_act2/03.mp4',
-    'assets/videos/roles_we_play_act2/04.mp4',
-    'assets/videos/roles_we_play_act2/05.mp4',
-    'assets/videos/roles_we_play_act2/06.mp4',
-    'assets/videos/roles_we_play_act2/07.mp4',
-    'assets/videos/roles_we_play_act2/08.mp4',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%205%20-%20Act2%20-%20The%20roles%20we%20play%2001.mp4?alt=media&token=9706c7e9-5769-407d-956a-959044c18f75',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%205%20-%20Act2%20-%20The%20roles%20we%20play%2002.mp4?alt=media&token=32445222-6386-4fbb-8ddf-773107628554',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%205%20-%20Act2%20-%20The%20roles%20we%20play%2003.mp4?alt=media&token=5cae9233-7049-460f-a3bb-5a58544804fa',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%205%20-%20Act2%20-%20The%20roles%20we%20play%2004.mp4?alt=media&token=c66ce9e9-5924-4190-8092-b54f52601887',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%205%20-%20Act2%20-%20The%20roles%20we%20play%2005.mp4?alt=media&token=c6901659-c9a9-4a47-82d6-529361abc964',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%205%20-%20Act2%20-%20The%20roles%20we%20play%2006.mp4?alt=media&token=2214b088-f802-4797-be8c-55a1bb8af650',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%205%20-%20Act2%20-%20The%20roles%20we%20play%2007.mp4?alt=media&token=35210a72-fe61-4f47-9b18-8dfdadc0f23d',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%205%20-%20Act2%20-%20The%20roles%20we%20play%2008.mp4?alt=media&token=c7ab3d90-3791-410b-8c6b-f663fa55c3a8',
   ];
 
   final List<Activity> _activities = const [
@@ -90,6 +89,10 @@ class DramaActivitiesPage extends StatelessWidget {
       location: 'Anywhere',
       imagePath: 'assets/roles7.png',
       imageColors: [Color(0xFF1A2E3A), Color(0xFF2D4A5A), Color(0xFF4A8A9A)],
+      facilitatorName: 'Sohail Al-Mahri',
+      facilitatorImagePath: 'assets/sohail.jpg',
+      fullDescription:
+          'A reflective, drama-based practice to explore the many roles you move through each day and how each one shapes your emotions. This activity helps you notice patterns, reconnect with your authentic self, and make space for choice in how you show up.',
       sessionVideoAssets: _rolesWePlayAct2Videos,
     ),
   ];

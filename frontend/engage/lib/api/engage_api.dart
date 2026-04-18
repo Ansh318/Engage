@@ -4,6 +4,43 @@ import 'package:http/http.dart' as http;
 
 import '../config/api_base.dart';
 
+/// Aggregated zone % for profile emotional journey (keys: regulated, energized, tense, low).
+class EmotionJourneyStats {
+  EmotionJourneyStats({
+    required this.sessionCount,
+    required this.checkInPercentages,
+    required this.checkOutPercentages,
+  });
+
+  final int sessionCount;
+  final Map<String, int> checkInPercentages;
+  final Map<String, int> checkOutPercentages;
+
+  factory EmotionJourneyStats.fromJson(Map<String, dynamic> json) {
+    const zeros = {
+      'regulated': 0,
+      'energized': 0,
+      'tense': 0,
+      'low': 0,
+    };
+    Map<String, int> parsePct(dynamic m) {
+      if (m is! Map) {
+        return Map<String, int>.from(zeros);
+      }
+      final parsed = m.map(
+        (k, v) => MapEntry(k.toString(), (v as num).round()),
+      );
+      return {...zeros, ...parsed};
+    }
+
+    return EmotionJourneyStats(
+      sessionCount: (json['session_count'] as num?)?.round() ?? 0,
+      checkInPercentages: parsePct(json['check_in_percentages']),
+      checkOutPercentages: parsePct(json['check_out_percentages']),
+    );
+  }
+}
+
 class EngageUser {
   EngageUser({
     required this.id,
@@ -161,6 +198,20 @@ class EngageApi {
     if (res.statusCode != 200) {
       throw _parseError(res);
     }
+  }
+
+  /// Regulation zone distribution from completed activity sessions (requires login).
+  Future<EmotionJourneyStats> getEmotionJourneyStats(String token) async {
+    final res = await _client.get(
+      _uri('/users/me/emotion-journey'),
+      headers: _headers(token: token),
+    );
+    if (res.statusCode != 200) {
+      throw _parseError(res);
+    }
+    return EmotionJourneyStats.fromJson(
+      jsonDecode(res.body) as Map<String, dynamic>,
+    );
   }
 
   Future<EngageUser> completeOnboarding(String token) async {

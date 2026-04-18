@@ -8,41 +8,50 @@ class SoundActivitiesPage extends StatelessWidget {
   const SoundActivitiesPage({super.key});
 
   static const List<String> _createYourTuneVideos = [
-    'assets/videos/create_your_tune/01.mp4',
-    'assets/videos/create_your_tune/02.mp4',
-    'assets/videos/create_your_tune/03.mp4',
-    'assets/videos/create_your_tune/04.mp4',
-    'assets/videos/create_your_tune/05.mp4',
-    'assets/videos/create_your_tune/06.mp4',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%2010%20-%20Create%20your%20Tune%2001.mp4?alt=media&token=20955cd3-5385-4317-b349-4b66d8eeb249',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%2010%20-%20Create%20your%20Tune%2002.mp4?alt=media&token=2d01cbf0-1453-4282-b483-a5912ef0fc65',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%2010%20-%20Create%20your%20Tune%2003.mp4?alt=media&token=0fc88a30-0048-4f35-81e4-76264073cd06',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%2010%20-%20Create%20your%20Tune%2004.mp4?alt=media&token=4f236ffe-83a1-4961-a487-770035d7bb52',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%2010%20-%20Create%20your%20Tune%2005.mp4?alt=media&token=57c25313-d8f1-4325-a639-928309a900ff',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%2010%20-%20Create%20your%20Tune%2006.mp4?alt=media&token=36821127-8cbd-414e-a6bf-5d6fee13e704',
   ];
 
   static const List<String> _feelThroughSoundVideos = [
-    'assets/videos/feel_through_sound/01.mp4',
-    'assets/videos/feel_through_sound/02.mp4',
-    'assets/videos/feel_through_sound/03.mp4',
-    'assets/videos/feel_through_sound/04.mp4',
-    'assets/videos/feel_through_sound/05.mp4',
-    'assets/videos/feel_through_sound/06.mp4',
-    'assets/videos/feel_through_sound/07.mp4',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%2011%20-%20Feel%20through%20sound%2001.mp4?alt=media&token=8221e828-d3df-4505-b560-52a37c89f2f8',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%2011%20-%20Feel%20through%20sound%2002.mp4?alt=media&token=a2690cc1-28c9-409a-bd61-1cb732047d85',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%2011%20-%20Feel%20through%20sound%2003.mp4?alt=media&token=78b034a6-5245-4c25-b56a-a0b1ac60819d',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%2011%20-%20Feel%20through%20sound%2004.mp4?alt=media&token=2c537dd0-6f69-454a-8f12-2d305b64b3d1',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%2011%20-%20Feel%20through%20sound%2005%20-%20Birdsong.mp4?alt=media&token=26c224bc-10ff-412e-99aa-2fdc0645764f',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%2011%20-%20Feel%20through%20sound%2006%20-%20Forest.mp4?alt=media&token=34c4d9a3-7a06-4f2c-ad2f-aff038f2d021',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%2011%20-%20Feel%20through%20sound%2007%20-%20Waterfall.mp4?alt=media&token=d54ee233-cc6e-4680-a65e-520ecc88a60f',
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/Video%2011%20-%20Feel%20through%20sound%2008.mp4?alt=media&token=632c9c5c-360c-4997-adb0-548430add8eb',
   ];
 
   final List<Activity> _activities = const [
     Activity(
       title: 'Create your tune',
-      description: 'Let your intuition guide the music you create, and reflect on your present moment.',
+      description: 'This activity invites you create your own rhythm using an instrument, or your body.',
       duration: '5 mins',
       location: 'Creative Space',
       imagePath: 'assets/tune3.png',
       imageColors: [Color(0xFF90EE90), Color(0xFFFFD700), Color(0xFF8B4513)],
+      facilitatorName: 'Shravani Purandare',
+      facilitatorImagePath: 'assets/shravani.jpeg',
+      fullDescription:
+          'This activity invites you create your own rhythm using an instrument, or your body. Follow simple prompts to create a short intuitive tune to help reflect on your present mood while engaging in a rhythmic flow state.',
       sessionVideoAssets: _createYourTuneVideos,
     ),
     Activity(
       title: 'Feel Through Sound',
-      description: 'Let music prompt your emotions, explore feelings, thoughts, and reflection through music.',
+      description: 'This sound-led activity guides you through different sounds to evoke thoughts, feelings and sensations.',
       duration: '8 mins',
       location: 'Anywhere',
       imagePath: 'assets/feelthroughsound3.png',
       imageColors: [Color(0xFF1E3A5F), Color(0xFF6B4C93), Color(0xFFFF6B35)],
+      facilitatorName: 'Shravani Purandare',
+      facilitatorImagePath: 'assets/shravani.jpeg',
+      fullDescription:
+          'This sound-led activity guides you through different sounds to evoke thoughts, feelings and sensations. Listen to short tunes and reflect on what they stir in you to identify themes, emotional states and recurring thoughts. No effort is required, just listen, feel, and reflect.',
       sessionVideoAssets: _feelThroughSoundVideos,
     ),
     Activity(
@@ -52,6 +61,8 @@ class SoundActivitiesPage extends StatelessWidget {
       location: 'Anywhere',
       imagePath: 'assets/tune8.png',
       imageColors: [Color(0xFF90EE90), Color(0xFFFFD700), Color(0xFF87CEEB)],
+      facilitatorName: 'Shravani Purandare',
+      facilitatorImagePath: 'assets/shravani.jpeg',
     ),
   ];
 

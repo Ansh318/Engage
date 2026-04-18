@@ -8,6 +8,10 @@ import 'onboarding/intro_page.dart';
 import 'onboarding/personal_info_page.dart';
 import 'services/session_store.dart';
 
+/// Firebase Storage download URL for the splash / landing clip.
+const String _landingPageVideoUrl =
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/landing_page_video.mp4?alt=media&token=ce38e0ba-c308-43da-894b-ebed97f25e1a';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -29,8 +33,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _initializeVideo() async {
     try {
-      debugPrint('Attempting to load video: assets/landing_page_video.mp4');
-      _controller = VideoPlayerController.asset('assets/landing_page_video.mp4');
+      debugPrint('Attempting to load landing video from network');
+      _controller = VideoPlayerController.networkUrl(Uri.parse(_landingPageVideoUrl));
       await _controller!.initialize();
       debugPrint(
         'Video initialized successfully. Duration: ${_controller!.value.duration}',

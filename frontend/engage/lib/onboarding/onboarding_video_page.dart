@@ -5,6 +5,9 @@ import '../api/engage_api.dart';
 import '../landing_page.dart';
 import '../services/session_store.dart';
 
+const String _onboardingVideoUrl =
+    'https://firebasestorage.googleapis.com/v0/b/engage-a9a72.firebasestorage.app/o/engage_onboarding_video.mp4?alt=media&token=1e4b3e45-bd97-4362-8bef-733faec5aeea';
+
 /// Full-screen page that plays the Engage onboarding activity video.
 /// On completion (or skip), navigates to [LandingPage].
 class OnboardingVideoPage extends StatefulWidget {
@@ -15,8 +18,6 @@ class OnboardingVideoPage extends StatefulWidget {
 }
 
 class _OnboardingVideoPageState extends State<OnboardingVideoPage> {
-  static const String _videoAsset = 'assets/engage_onboarding_video.mp4';
-
   VideoPlayerController? _controller;
   bool _hasError = false;
   bool _isInitialized = false;
@@ -29,7 +30,8 @@ class _OnboardingVideoPageState extends State<OnboardingVideoPage> {
 
   Future<void> _initializeVideo() async {
     try {
-      _controller = VideoPlayerController.asset(_videoAsset);
+      _controller =
+          VideoPlayerController.networkUrl(Uri.parse(_onboardingVideoUrl));
       await _controller!.initialize();
       _controller!.setLooping(false);
       _controller!.addListener(_videoListener);
