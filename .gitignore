@@ -1,5 +1,6 @@
 .venv-backend/
 src/.venv/
+venv/
 __pycache__/
 *.py[cod]
 .env
